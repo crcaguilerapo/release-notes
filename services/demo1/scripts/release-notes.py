@@ -19,7 +19,7 @@ url = f"https://api.github.com/repos/{owner}/{REPO}/releases"
 datos = {
   "owner": owner,
   "repo": REPO,
-  "tag_name": 'demo1 v1.0.0',
+  "tag_name": 'demo1-v1.0.0',
   "target_commitish": branch,
   "name": 'v1.0.0',
   "generate_release_notes": True,
