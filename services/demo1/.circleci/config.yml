@@ -1,0 +1,34 @@
+version: 2.1
+
+jobs:
+  demo1-build:
+    working_directory: ~/project/services/demo1
+    docker:
+      - image: cimg/python:3.11.5
+    steps:
+      - checkout
+
+  demo1-release-notes:
+    working_directory: ~/project/services/demo1
+    docker:
+      - image: cimg/python:3.11.5
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: pip install requests
+      - run:
+          name: Generate release notes
+          command: python services/demo1/scripts/release-notes.py
+
+workflows:
+  demo1:
+    jobs:
+      - demo1-build
+      - demo1-release-notes:
+          requires:
+            - demo1-build
+          filters:
+            branches:
+              only:
+                - main

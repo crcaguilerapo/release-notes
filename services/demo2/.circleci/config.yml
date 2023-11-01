@@ -1,0 +1,30 @@
+version: 2.1
+
+jobs:
+  demo2-build:
+    docker:
+      - image: cimg/python:3.11.5
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies and build project
+          command: cd services/demo2
+  demo2-release-notes:
+    docker:
+      - image: cimg/python:3.11.5
+    steps:
+      - checkout
+      - run:
+          name: Generate release notes
+          command: cd services/demo2
+workflows:
+  demo2:
+    jobs:
+      - demo2-build
+      - demo2-release-notes:
+          requires:
+            - demo2-build
+          filters:
+            branches:
+              only:
+                - main
