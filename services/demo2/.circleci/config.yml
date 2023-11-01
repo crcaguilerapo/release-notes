@@ -15,8 +15,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: pip install requests
+      - run:
           name: Generate release notes
-          command: cd services/demo2
+          command: python services/demo2/scripts/release-notes.py
 workflows:
   demo2:
     jobs:
