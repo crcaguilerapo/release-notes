@@ -14,6 +14,7 @@ jobs:
       - image: cimg/python:3.11.5
     steps:
       - checkout
+      - github-cli/setup
       - run:
           name: Install dependencies
           command: pip install requests
@@ -23,7 +24,6 @@ jobs:
       - run:
           name: "Check PR labels"
           command: |
-            #$CIRCLE_SHA1
             PR_URL=$(gh pr list --state merged --search $CIRCLE_SHA1 --json url --jq '.[].url')
             PR_NUMBER=$(gh pr list --state merged --search $CIRCLE_SHA1 --json number --jq '.[].number')
             echo "Pull Request Url: $PR_URL"
