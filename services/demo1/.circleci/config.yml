@@ -24,37 +24,7 @@ jobs:
           command: pip install -r services/demo1/scripts/requirements.txt
       - run:
           name: "Check PR labels"
-          command: |
-            PR_URL=$(gh pr list --state merged --search af1dcb84c0c0ea637550a27b9f77c5e8e309b485 --json url --jq '.[].url')
-            PR_NUMBER=$(gh pr list --state merged --search af1dcb84c0c0ea637550a27b9f77c5e8e309b485 --json number --jq '.[].number')
-            echo "Pull Request Url: $PR_URL"
-            LABELS=$(gh pr view $PR_URL --json labels  --jq '.labels[]| select((.name=="breaking change") or (.name=="feature") or (.name=="fix")) |.name')
-            NUMBER_OF_LABELS=$(echo "$LABELS" |wc -w)
-            if [ "$NUMBER_OF_LABELS" -eq "1" ] ; then
-              echo "Found: $LABELS"
-              RELEASE_TYPE="$LABELS"
-              echo "export RELEASE_TYPE='$LABELS'" >> "$BASH_ENV"
-            elif [ "$NUMBER_OF_LABELS" -gt "1" ] ; then
-              if [[ "$LABELS" == *"$breaking change"* ]] ; then
-                echo "Found: breaking change"
-                RELEASE_TYPE="breaking change"
-                echo "export RELEASE_TYPE='breaking change'" >> "$BASH_ENV"
-              else
-                echo "::error ::Too many release type labels: $( echo $LABELS | tr '\n' ' ' )"
-                exit 1
-              fi
-            else
-              RELEASE_TYPE="no release"
-              echo "export RELEASE_TYPE='no release'" >> "$BASH_ENV"
-              echo "🚫 No release type labels found(breaking change/feature/fix)"
-            fi
-            OUTPUT_FILES="outputFiles"
-            mkdir $OUTPUT_FILES
-            echo "export OUTPUT_FILES=$OUTPUT_FILES" >> "$BASH_ENV"
-            echo "export PR_NUMBER=$PR_NUMBER" >> "$BASH_ENV"
-      - run:
-          name: Generate release notes
-          command: python services/demo1/scripts/release-notes.py
+          command: python services/demo1/scripts/check-pr-labels.py
 
 workflows:
   demo1:
