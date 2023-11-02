@@ -20,6 +20,7 @@ jobs:
           name: Set enviroment variables
           command: |
             export PACKAGE_NAME_MODULE=demo1
+            export OUTPUT_FILES=out_files
       - run:
           name: Install dependencies
           command: pip install requests

@@ -29,7 +29,5 @@ else:
     os.environ["RELEASE_TYPE"] = RELEASE_TYPE
     print("🚫 No release type labels found (breaking change/feature/fix)")
 
-OUTPUT_FILES = "outputFiles"
-os.makedirs("outputFiles", exist_ok=True)
-os.environ["OUTPUT_FILES"] = OUTPUT_FILES
+os.makedirs(os.environ["OUTPUT_FILES"], exist_ok=True)
 os.environ["PR_NUMBER"] = PR_NUMBER
