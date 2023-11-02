@@ -34,8 +34,7 @@ jobs:
               python services/demo1/scripts/detect-semantic-version.py -function detect_previous_version
               ls
               pwd
-              cd services/demo1/scripts/ && ls
-              PREV_VERSION=$(cat services/demo1/scripts/$OUTPUT_FILES/previous-version.txt)
+              PREV_VERSION=$(cat $OUTPUT_FILES/previous-version.txt)
               echo "export PREV_VERSION=$PREV_VERSION" >> "$BASH_ENV"
             else
               echo "$RELEASE_TYPE"
