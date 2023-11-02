@@ -66,4 +66,4 @@ workflows:
           filters:
             branches:
               only:
-                - test_semantic_version
+                - main
