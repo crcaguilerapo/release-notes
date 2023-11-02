@@ -26,6 +26,7 @@ response = requests.post('https://api.github.com/graphql',
                             json={'query': query, 'variables': variables}, 
                             headers=headers)
 result = response.json()
+print(result)
 prevNode = result['data']['repository']['refs']['edges'][0]
 prevVer = prevNode['node']['name'] if prevNode else '0.0.0'
 print('Found previous version', prevVer)
