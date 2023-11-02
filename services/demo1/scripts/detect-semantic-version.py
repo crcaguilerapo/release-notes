@@ -1,6 +1,7 @@
 import os
 import argparse
 import requests
+import subprocess
 
 def detect_previous_version():
     print(os.environ['PACKAGE_NAME_MODULE'])
@@ -31,6 +32,10 @@ def detect_previous_version():
     print('Found previous version', prevVer)
     with open(os.path.join(os.environ['OUTPUT_FILES'], 'previous-version.txt'), 'w', encoding='utf-8') as file:
         file.write(prevVer)
+
+
+    print("SHELL: ", subprocess.check_output("ls -l", shell=True).decode())
+    print("SHELL: ", subprocess.check_output("pwd", shell=True).decode())
 
 def detect_new_version():
     PREV_VERSION = os.environ['PREV_VERSION']
