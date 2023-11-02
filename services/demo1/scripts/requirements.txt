@@ -1,3 +1,4 @@
 anyio
 octokitpy
 PyGithub
+requests

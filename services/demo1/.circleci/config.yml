@@ -19,11 +19,8 @@ jobs:
       - run:
           name: Set enviroment variables
           command: |
-            export PACKAGE_NAME_MODULE=demo1
-            export OUTPUT_FILES=out_files
-      - run:
-          name: Install dependencies
-          command: pip install requests
+            echo 'export PACKAGE_NAME_MODULE=demo1' >> $BASH_ENV
+            echo 'export OUTPUT_FILES=out_files' >> $BASH_ENV
       - run:
           name: Install Python Deps
           command: pip install -r services/demo1/scripts/requirements.txt
