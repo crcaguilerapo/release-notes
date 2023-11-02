@@ -1,4 +1,1 @@
-anyio
-octokitpy
-PyGithub
 requests
