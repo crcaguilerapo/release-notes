@@ -50,7 +50,6 @@ jobs:
             OUTPUT_FILES="outputFiles"
             mkdir $OUTPUT_FILES
             echo "export OUTPUT_FILES=$OUTPUT_FILES" >> "$BASH_ENV"
-            echo "export PACKAGE_NAME_MODULE=<< parameters.name-module >>" >> "$BASH_ENV"
             echo "export PR_NUMBER=$PR_NUMBER" >> "$BASH_ENV"
       - run:
           name: Generate release notes
