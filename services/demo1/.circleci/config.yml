@@ -32,7 +32,7 @@ jobs:
           command: |
             if [[ "$RELEASE_TYPE" != "no release" ]] ; then
               python services/demo1/scripts/detect-semantic-version.py -function detect_previous_version
-              ls
+              ls $OUTPUT_FILES/
               pwd
               PREV_VERSION=$(cat $OUTPUT_FILES/previous-version.txt)
               echo "export PREV_VERSION=$PREV_VERSION" >> "$BASH_ENV"
