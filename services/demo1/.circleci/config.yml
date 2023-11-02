@@ -25,8 +25,8 @@ jobs:
       - run:
           name: "Check PR labels"
           command: |
-            PR_URL=$(gh pr list --state merged --search $CIRCLE_SHA1 --json url --jq '.[].url')
-            PR_NUMBER=$(gh pr list --state merged --search $CIRCLE_SHA1 --json number --jq '.[].number')
+            PR_URL=$(gh pr list --state merged --search af1dcb84c0c0ea637550a27b9f77c5e8e309b485 --json url --jq '.[].url')
+            PR_NUMBER=$(gh pr list --state merged --search af1dcb84c0c0ea637550a27b9f77c5e8e309b485 --json number --jq '.[].number')
             echo "Pull Request Url: $PR_URL"
             LABELS=$(gh pr view $PR_URL --json labels  --jq '.labels[]| select((.name=="breaking change") or (.name=="feature") or (.name=="fix")) |.name')
             NUMBER_OF_LABELS=$(echo "$LABELS" |wc -w)
