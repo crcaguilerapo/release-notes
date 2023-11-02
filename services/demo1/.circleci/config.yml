@@ -15,14 +15,6 @@ jobs:
       - image: cimg/python:3.11.5
     steps:
       - checkout
-      - github-cli/setup
-      - run:
-          name: Set enviroment variables
-          command: |
-            echo 'export PACKAGE_NAME_MODULE=demo1' >> $BASH_ENV
-      - run:
-          name: Install Python Dependencies
-          command: pip install -r services/demo1/scripts/requirements.txt
 workflows:
   demo1:
     jobs:

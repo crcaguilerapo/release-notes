@@ -14,12 +14,6 @@ jobs:
       - image: cimg/python:3.11.5
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: pip install requests
-      - run:
-          name: Generate release notes
-          command: python services/demo2/scripts/release-notes.py
 workflows:
   demo2:
     jobs:

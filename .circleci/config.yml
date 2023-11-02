@@ -16,7 +16,14 @@ parameters:
     description: Some string to pass
     type: string
     default: ""
-
+jobs:
+  generate-versions:
+    docker:
+      - image: cimg/python:3.11.5
+    steps:
+      - checkout
+      - run: pip install -r ./scripts/
+      - run: python ./scripts/semantic-versioning
 workflows:
   # The setup workflow
   monorepo:
@@ -30,7 +37,13 @@ workflows:
           modules: |
             services/demo1
             services/demo2
-
+      - generate-versions:
+          requires:
+            - config-splitting/setup-dynamic-config
+          filters:
+            branches:
+              only:
+                - main
 orbs:
   # An "embedded" orb to facilitate config splitting
   config-splitting:
