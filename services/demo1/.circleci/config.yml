@@ -17,6 +17,10 @@ jobs:
       - checkout
       - github-cli/setup
       - run:
+          name: Set enviroment variables
+          command: |
+            export PACKAGE_NAME_MODULE=demo1
+      - run:
           name: Install dependencies
           command: pip install requests
       - run:
@@ -30,7 +34,7 @@ jobs:
           command: |
             if [[ "$RELEASE_TYPE" != "no release" ]] ; then
               python services/demo1/scripts/detect-semantic-version.py -function detect_previous_version
-              PREV_VERSION=$(cat outputFiles/previous-version.txt)
+              PREV_VERSION=$(cat $OUTPUT_FILES/previous-version.txt)
               echo "export PREV_VERSION=$PREV_VERSION" >> "$BASH_ENV"
             else
               echo "$RELEASE_TYPE"
@@ -40,15 +44,15 @@ jobs:
           command: |
             if [[ "$RELEASE_TYPE" != "no release" ]] ; then
               python services/demo1/scripts/detect-semantic-version.py -function detect_new_version
-              NEW_VERSION_FILE=$(cat outputFiles/new-version.txt)
+              NEW_VERSION_FILE=$(cat $OUTPUT_FILES/new-version.txt)
               
               if [[ "$NEW_VERSION_FILE" == "0.0.0" ]] ; then
-                echo "$PREV_VERSION" > outputFiles/previous-version.txt
-                echo "$PREV_VERSION" >outputFiles/new-version.txt
+                echo "$PREV_VERSION" > $OUTPUT_FILES/previous-version.txt
+                echo "$PREV_VERSION" > $OUTPUT_FILES/new-version.txt
                 NEW_VERSION="$PREV_VERSION"
               else
-                echo "$PREV_VERSION" > outputFiles/previous-version.txt
-                echo "$NEW_VERSION_FILE" > outputFiles/new-version.txt
+                echo "$PREV_VERSION" > $OUTPUT_FILES/previous-version.txt
+                echo "$NEW_VERSION_FILE" > $OUTPUT_FILES/new-version.txt
                 NEW_VERSION="$NEW_VERSION_FILE"
               fi
               echo "export NEW_VERSION=$NEW_VERSION" >> "$BASH_ENV"
