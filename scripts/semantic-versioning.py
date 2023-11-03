@@ -5,15 +5,15 @@ import os
 REPO = os.getenv("CIRCLE_PROJECT_REPONAME")
 
 if REPO is None:
-    raise Exception("Not found CIRCLE_PROJECT_REPONAME")
+    raise Exception("CIRCLE_PROJECT_REPONAME not found")
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 if GITHUB_TOKEN is None:
-    raise Exception("Not found GITHUB_TOKEN")
+    raise Exception("GITHUB_TOKEN not found")
 
 COMMIT = os.getenv("CIRCLE_SHA1")
 if COMMIT is None:
-    raise Exception("Not found CIRCLE_SHA1")
+    raise Exception("CIRCLE_SHA1 not found")
 
 
 def get_version(token, owner, repo):
