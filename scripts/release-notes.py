@@ -70,18 +70,18 @@ def get_pull_request(token, owner, repo, commit):
         print(f"Error: {response.status_code} - {response.text}")
 
 
-def get_comments(token, owner, repo, pull_number):
-    url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/comments"
+def get_body(token, owner, repo, pull_number):
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}"
 
     response = requests.get(url, headers={"Authorization": f"token {token}"})
 
     if response.status_code == 200:
-        comments = response.json()
-        print(comments)
+        response = response.json()
+        return response["body"]
     else:
         print(f"Error: {response.status_code} - {response.text}")
 
 version = get_version(GITHUB_TOKEN, owner, REPO)
 pr_number = get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
-comment = get_comments(GITHUB_TOKEN, owner, REPO, pr_number)
-create_release(GITHUB_TOKEN, owner, REPO, branch, version)
+body = get_body(GITHUB_TOKEN, owner, REPO, pr_number)
+create_release(GITHUB_TOKEN, owner, REPO, branch, version, body)
