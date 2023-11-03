@@ -19,7 +19,7 @@ if COMMIT is None:
 
 try:
     # Open the JSON file in read mode
-    with open("file.json", "r") as file:
+    with open("semantic-versioning.json", "r") as file:
         # Load JSON content into a dictionary
         semantic_versioning = json.load(file)
 
@@ -28,7 +28,7 @@ try:
     semantic_versioning["release"] += random.choice([True, False])
 
     # Open the JSON file in write mode and save the updated data
-    with open("file.json", "w") as file:
+    with open("semantic-versioning.json", "w") as file:
         json.dump(
             semantic_versioning, file, indent=4
         )  # indentation for better readability

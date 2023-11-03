@@ -17,7 +17,7 @@ BRANCH = "main"
 
 try:
     # Open the JSON file in read mode
-    with open("file.json", "r") as file:
+    with open("semantic-versioning.json", "r") as file:
         # Load JSON content into a dictionary
         semantic_versioning = json.load(file)
 
