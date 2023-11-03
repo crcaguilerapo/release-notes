@@ -24,6 +24,7 @@ jobs:
       - checkout
       - run: pip install -r ./scripts/requirements.txt
       - run: cd ./scripts/ && python semantic-versioning.py
+      - run: cd ./scripts/ && python release-notes.py
 workflows:
   # The setup workflow
   monorepo:

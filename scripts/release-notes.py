@@ -12,29 +12,38 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 if GITHUB_TOKEN is None:
     raise Exception("Not found GITHUB_TOKEN")
 
-OWNER = "crcaguilerapo"
-BRANCH = "main"
+COMMIT = os.getenv("CIRCLE_SHA1")
+if COMMIT is None:
+    raise Exception("Not found CIRCLE_SHA1")
 
-try:
-    # Open the JSON file in read mode
-    with open("semantic-versioning.json", "r") as file:
-        # Load JSON content into a dictionary
-        semantic_versioning = json.load(file)
+owner = "crcaguilerapo"
+branch = "main"
 
-    version_number = semantic_versioning["version"]
-    module_name = semantic_versioning["module"]
+def get_version(token, owner, repo):
+    headers = {
+        'Authorization': f'token {token}'
+    }
+    
+    url = f'https://api.github.com/repos/{owner}/{repo}/git/refs/tags'
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        tags = response.json()
+        last_tag = tags[0]["ref"].split("/")[-1]
+        return last_tag
+    elif response.status_code == 404:
+        return "0"
+    else:
+        print(f"Error getting tags: {response.status_code}")
 
-except FileNotFoundError:
-    print("JSON file not found.")
-
-
-def create_release(token, owner, repo, branch, module_name, version_number):
+def create_release(token, owner, repo, branch, version_number, body):
     payload = {
         "owner": owner,
         "repo": repo,
-        "tag_name": f"{module_name}/{version_number}",
+        "tag_name": f"{version_number}",
         "target_commitish": branch,
-        "name": f"Release {module_name}/{version_number}",
+        "name": f"{version_number}",
+        "body": body
     }
 
     url = f"https://api.github.com/repos/{owner}/{repo}/releases"
@@ -56,7 +65,7 @@ def get_pull_request(token, owner, repo, commit):
 
     if response.status_code == 200:
         pull_requests = response.json()
-        print(pull_requests)
+        return pull_requests[0]["number"]
     else:
         print(f"Error: {response.status_code} - {response.text}")
 
@@ -71,3 +80,8 @@ def get_comments(token, owner, repo, pull_number):
         print(comments)
     else:
         print(f"Error: {response.status_code} - {response.text}")
+
+version = get_version(GITHUB_TOKEN, owner, REPO)
+pr_number = get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
+comment = get_comments(GITHUB_TOKEN, owner, REPO, pr_number)
+create_release(GITHUB_TOKEN, owner, REPO, branch, version)
