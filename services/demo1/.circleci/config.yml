@@ -1,15 +1,6 @@
 version: 2.1
-orbs:
-  github-cli: circleci/github-cli@2.2.0
 jobs:
   demo1-build:
-    working_directory: ~/project/services/demo1
-    docker:
-      - image: cimg/python:3.11.5
-    steps:
-      - checkout
-
-  demo1-release-notes:
     working_directory: ~/project/services/demo1
     docker:
       - image: cimg/python:3.11.5
@@ -19,10 +10,3 @@ workflows:
   demo1:
     jobs:
       - demo1-build
-      - demo1-release-notes:
-          requires:
-            - demo1-build
-          filters:
-            branches:
-              only:
-                - main
