@@ -9,6 +9,7 @@ jobs:
       - run:
           name: Install dependencies and build project
           command: cd services/demo2
+
 workflows:
   demo2:
     jobs:
