@@ -23,7 +23,7 @@ jobs:
     steps:
       - checkout
       - run: pip install -r ./scripts/requirements.txt
-      - run: python ./scripts/semantic-versioning.py
+      - run: cd ./scripts/ && python semantic-versioning.py
 workflows:
   # The setup workflow
   monorepo:
