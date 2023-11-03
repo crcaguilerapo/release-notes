@@ -84,4 +84,4 @@ def get_comments(token, owner, repo, pull_number):
 version = get_version(GITHUB_TOKEN, owner, REPO)
 pr_number = get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
 comment = get_comments(GITHUB_TOKEN, owner, REPO, pr_number)
-create_release(GITHUB_TOKEN, owner, REPO, branch, version)
+create_release(GITHUB_TOKEN, owner, REPO, branch, version, comment)
