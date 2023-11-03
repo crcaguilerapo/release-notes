@@ -117,4 +117,4 @@ for folder in ["services/demo1", "services/demo2"]:
     for commit in commits:
         changelog_text += f"  - {commit}\n"
 
-create_release(GITHUB_TOKEN, owner, REPO, branch, version, body + changelog)
+create_release(GITHUB_TOKEN, owner, REPO, branch, version, body + changelog_text)
