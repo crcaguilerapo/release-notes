@@ -22,8 +22,6 @@ jobs:
       - image: cimg/python:3.11.5
     steps:
       - checkout
-      - run: ls
-      - run: pwd
       - run: pip install -r ./scripts/requirements.txt
       - run: python ./scripts/semantic-versioning.py
 workflows:
