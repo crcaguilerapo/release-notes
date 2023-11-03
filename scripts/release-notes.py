@@ -81,7 +81,39 @@ def get_body(token, owner, repo, pull_number):
     else:
         print(f"Error: {response.status_code} - {response.text}")
 
+def get_commits_by_folder(token, owner, repo, pull_request_number, folder):
+    url = f'https://api.github.com/repos/{owner}/{repo}/pulls/{pull_request_number}/commits'
+    headers = {
+        'Authorization': f'token {token}'
+    }
+    response = requests.get(url, headers=headers)
+    commits = response.json()
+
+    modified_commits = []
+
+    for commit in commits:
+        sha = commit['sha']
+        commit_details_url = f'https://api.github.com/repos/{owner}/{repo}/commits/{sha}'
+        commit_details_response = requests.get(commit_details_url, headers=headers)
+        commit_details = commit_details_response.json()
+
+        modified_files = commit_details['files']
+        for file in modified_files:
+            if folder in file['filename']:
+                modified_commits.append(sha)
+
+    return modified_commits
+
+
 version = get_version(GITHUB_TOKEN, owner, REPO)
 pr_number = get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
 body = get_body(GITHUB_TOKEN, owner, REPO, pr_number)
-create_release(GITHUB_TOKEN, owner, REPO, branch, version, body)
+
+changelog = f"""
+
+# Changelog
+
+"""
+for folder in ["services/demo1", "services/demo2"]:
+    changelog + "/n" + folder + "/n" + str (get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder))
+create_release(GITHUB_TOKEN, owner, REPO, branch, version, body + changelog)
