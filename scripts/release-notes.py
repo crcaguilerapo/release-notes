@@ -115,5 +115,5 @@ changelog = f"""
 
 """
 for folder in ["services/demo1", "services/demo2"]:
-    changelog + "/n" + folder + "/n" + str (get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder))
+    changelog = changelog + "/n" + folder + "/n" + str (get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder))
 create_release(GITHUB_TOKEN, owner, REPO, branch, version, body + changelog)
