@@ -25,7 +25,7 @@ def get_version(token, owner, repo):
     
     if response.status_code == 200:
         tags = response.json()
-        last_tag = tags[0]["ref"].split("/")[-1]
+        last_tag = tags[-1]["ref"].split("/")[-1]
         return last_tag
     elif response.status_code == 404:
         return "0"
