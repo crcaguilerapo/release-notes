@@ -1,6 +1,5 @@
 version: 2.1
 
-
 jobs:
   demo2-build:
     docker:
