@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   demo1-build:
     working_directory: ~/project/services/demo1
@@ -6,6 +7,7 @@ jobs:
       - image: cimg/python:3.11.5
     steps:
       - checkout
+
 workflows:
   demo1:
     jobs:
