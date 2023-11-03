@@ -22,8 +22,8 @@ jobs:
       - image: cimg/python:3.11.5
     steps:
       - checkout
-      - run: pip install -r ./scripts/
-      - run: python ./scripts/semantic-versioning
+      - run: pip install -r ./scripts/requirements.txt
+      - run: python ./scripts/semantic-versioning.py
 workflows:
   # The setup workflow
   monorepo:
