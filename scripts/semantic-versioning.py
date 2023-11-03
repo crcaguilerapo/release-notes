@@ -25,11 +25,10 @@ def get_version(token, owner, repo):
     
     if response.status_code == 200:
         tags = response.json()
-        if len(tags) > 0:
-            last_tag = tags[0]["ref"].split("/")[-1]
-            return last_tag
-        else:
-            return "0"
+        last_tag = tags[0]["ref"].split("/")[-1]
+        return last_tag
+    elif response.status_code == 404:
+        return "0"
     else:
         print(f"Error getting tags: {response.status_code}")
 
@@ -57,7 +56,7 @@ def create_tag(token, owner, repo, commit, tag_name):
         print(f"Error creating tag on GitHub. Status code: {response.status_code}")
 
 
-def create_ref(token, owner, repo, tag_sha):
+def create_ref(token, owner, repo, tag_name, tag_sha):
     ref_data = {
         "ref": f"refs/tags/{tag_name}",
         "sha": tag_sha
@@ -82,8 +81,8 @@ def create_ref(token, owner, repo, tag_sha):
 
 owner = "crcaguilerapo"
 version = get_version(GITHUB_TOKEN, owner, REPO)
-tag = create_tag(GITHUB_TOKEN, owner, REPO, COMMIT, int (version) + 1)
-create_ref(GITHUB_TOKEN, owner, REPO, tag)
+tag = create_tag(GITHUB_TOKEN, owner, REPO, COMMIT, str (int (version) + 1))
+create_ref(GITHUB_TOKEN, owner, REPO, str (int (version) + 1), tag)
 
 
     
