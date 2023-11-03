@@ -15,14 +15,13 @@ COMMIT = os.getenv("CIRCLE_SHA1")
 if COMMIT is None:
     raise Exception("Not found CIRCLE_SHA1")
 
+
 def get_version(token, owner, repo):
-    headers = {
-        'Authorization': f'token {token}'
-    }
-    
-    url = f'https://api.github.com/repos/{owner}/{repo}/git/refs/tags'
+    headers = {"Authorization": f"token {token}"}
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/git/refs/tags"
     response = requests.get(url, headers=headers)
-    
+
     if response.status_code == 200:
         tags = response.json()
         last_tag = tags[-1]["ref"].split("/")[-1]
@@ -57,32 +56,24 @@ def create_tag(token, owner, repo, commit, tag_name):
 
 
 def create_ref(token, owner, repo, tag_name, tag_sha):
-    ref_data = {
-        "ref": f"refs/tags/{tag_name}",
-        "sha": tag_sha
-    }
+    ref_data = {"ref": f"refs/tags/{tag_name}", "sha": tag_sha}
 
     response = requests.post(
         f"https://api.github.com/repos/{owner}/{repo}/git/refs",
-        headers={
-            "Authorization": f"Bearer {token}"
-        },
-        json=ref_data
+        headers={"Authorization": f"Bearer {token}"},
+        json=ref_data,
     )
 
     if response.status_code == 201:
-        print(f"Tag {tag_name} y su referencia fueron creados exitosamente.")
+        print(f"Tag {tag_name} adn ref created successfully")
     else:
-        print(f"Error al crear el tag y su referencia. Código de estado: {response.status_code}")
+        print(
+            f"Error creating ref. State Code: {response.status_code}"
+        )
         print(response.text)
-
-
 
 
 owner = "crcaguilerapo"
 version = get_version(GITHUB_TOKEN, owner, REPO)
-tag = create_tag(GITHUB_TOKEN, owner, REPO, COMMIT, str (int (version) + 1))
-create_ref(GITHUB_TOKEN, owner, REPO, str (int (version) + 1), tag)
-
-
-    
+tag = create_tag(GITHUB_TOKEN, owner, REPO, COMMIT, str(int(version) + 1))
+create_ref(GITHUB_TOKEN, owner, REPO, str(int(version) + 1), tag)

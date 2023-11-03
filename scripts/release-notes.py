@@ -19,14 +19,13 @@ if COMMIT is None:
 owner = "crcaguilerapo"
 branch = "main"
 
+
 def get_version(token, owner, repo):
-    headers = {
-        'Authorization': f'token {token}'
-    }
-    
-    url = f'https://api.github.com/repos/{owner}/{repo}/git/refs/tags'
+    headers = {"Authorization": f"token {token}"}
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/git/refs/tags"
     response = requests.get(url, headers=headers)
-    
+
     if response.status_code == 200:
         tags = response.json()
         last_tag = tags[-1]["ref"].split("/")[-1]
@@ -36,6 +35,7 @@ def get_version(token, owner, repo):
     else:
         print(f"Error getting tags: {response.status_code}")
 
+
 def create_release(token, owner, repo, branch, version_number, body):
     payload = {
         "owner": owner,
@@ -43,7 +43,7 @@ def create_release(token, owner, repo, branch, version_number, body):
         "tag_name": f"{version_number}",
         "target_commitish": branch,
         "name": f"{version_number}",
-        "body": body
+        "body": body,
     }
 
     url = f"https://api.github.com/repos/{owner}/{repo}/releases"
@@ -67,7 +67,7 @@ def get_pull_request(token, owner, repo, commit):
         pull_requests = response.json()
         return pull_requests[0]["number"]
     else:
-        print(f"Error: {response.status_code} - {response.text}")
+        print(f"Error getting PR number: {response.status_code} - {response.text}")
 
 
 def get_body(token, owner, repo, pull_number):
@@ -79,27 +79,28 @@ def get_body(token, owner, repo, pull_number):
         response = response.json()
         return response["body"]
     else:
-        print(f"Error: {response.status_code} - {response.text}")
+        print(f"Error obtaining the PR body: {response.status_code} - {response.text}")
+
 
 def get_commits_by_folder(token, owner, repo, pull_request_number, folder):
-    url = f'https://api.github.com/repos/{owner}/{repo}/pulls/{pull_request_number}/commits'
-    headers = {
-        'Authorization': f'token {token}'
-    }
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_request_number}/commits"
+    headers = {"Authorization": f"token {token}"}
     response = requests.get(url, headers=headers)
     commits = response.json()
 
     modified_commits = []
 
     for commit in commits:
-        sha = commit['sha']
-        commit_details_url = f'https://api.github.com/repos/{owner}/{repo}/commits/{sha}'
+        sha = commit["sha"]
+        commit_details_url = (
+            f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}"
+        )
         commit_details_response = requests.get(commit_details_url, headers=headers)
         commit_details = commit_details_response.json()
 
-        modified_files = commit_details['files']
+        modified_files = commit_details["files"]
         for file in modified_files:
-            if folder in file['filename']:
+            if folder in file["filename"]:
                 modified_commits.append(sha)
 
     return modified_commits
@@ -109,11 +110,11 @@ version = get_version(GITHUB_TOKEN, owner, REPO)
 pr_number = get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
 body = get_body(GITHUB_TOKEN, owner, REPO, pr_number)
 
-changelog = f"""
-
-# Changelog
-
-"""
+changelog_text = "Changelog\n\n"
 for folder in ["services/demo1", "services/demo2"]:
-    changelog = changelog + "/n" + folder + "/n" + str (get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder))
+    commits = get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder)
+    changelog_text += f"- {folder}:\n"
+    for commit in commits:
+        changelog_text += f"  - {commit}\n"
+
 create_release(GITHUB_TOKEN, owner, REPO, branch, version, body + changelog)
