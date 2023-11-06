@@ -36,7 +36,7 @@ def create_release(token, owner, repo, branch, version_number, body):
     )
 
     if respuesta.status_code == 201:
-        print(f"Tag created successfully in the '{repo}' repository.")
+        print(f"Release created successfully in the '{repo}' repository.")
     else:
         print(f"Error creating the tag. Status code: {respuesta.status_code}")
         print(respuesta.text)
@@ -82,7 +82,7 @@ version = utils.get_version(GITHUB_TOKEN, owner, REPO)
 pr_number = utils.get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
 body = get_body(GITHUB_TOKEN, owner, REPO, pr_number)
 
-changelog_text = "### Changelog \n\n"
+changelog_text = "\n\n### Changelog \n\n"
 for folder in ["services/demo1", "services/demo2"]:
     commits = get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder)
     changelog_text += f"- {folder}:\n"
