@@ -36,7 +36,7 @@ def create_release(token, owner, repo, branch, version_number, body):
     )
 
     if respuesta.status_code == 201:
-        print(f"Tag created successfully in the '{repo}' repository.")
+        print(f"Release created successfully in the '{repo}' repository.")
     else:
         print(f"Error creating the tag. Status code: {respuesta.status_code}")
         print(respuesta.text)
