@@ -82,7 +82,7 @@ version = utils.get_version(GITHUB_TOKEN, owner, REPO)
 pr_number = utils.get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
 body = get_body(GITHUB_TOKEN, owner, REPO, pr_number)
 
-changelog_text = "### Changelog \n\n"
+changelog_text = "\n\n### Changelog \n\n"
 for folder in ["services/demo1", "services/demo2"]:
     commits = get_commits_by_folder(GITHUB_TOKEN, owner, REPO, pr_number, folder)
     changelog_text += f"- {folder}:\n"
