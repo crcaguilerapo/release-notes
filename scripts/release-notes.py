@@ -1,6 +1,6 @@
 import os
 import requests
-import json
+import utils
 
 REPO = os.getenv("CIRCLE_PROJECT_REPONAME")
 
@@ -18,22 +18,6 @@ if COMMIT is None:
 
 owner = "crcaguilerapo"
 branch = "main"
-
-
-def get_version(token, owner, repo):
-    headers = {"Authorization": f"token {token}"}
-
-    url = f"https://api.github.com/repos/{owner}/{repo}/git/refs/tags"
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        tags = response.json()
-        last_tag = tags[-1]["ref"].split("/")[-1]
-        return last_tag
-    elif response.status_code == 404:
-        return "0"
-    else:
-        print(f"Error getting tags: {response.status_code}")
 
 
 def create_release(token, owner, repo, branch, version_number, body):
@@ -56,21 +40,6 @@ def create_release(token, owner, repo, branch, version_number, body):
     else:
         print(f"Error creating the tag. Status code: {respuesta.status_code}")
         print(respuesta.text)
-
-
-def get_pull_request(token, owner, repo, commit):
-    url = f"https://api.github.com/repos/{owner}/{repo}/commits/{commit}/pulls"
-
-    response = requests.get(url, headers={"Authorization": f"token {token}"})
-
-    if response.status_code == 200:
-        pull_requests = response.json()
-        if len(pull_requests) > 0:
-            return pull_requests[0]["number"]
-        else:
-            raise Exception("PR on commit not found")
-    else:
-        print(f"Error getting PR number: {response.status_code} - {response.text}")
 
 
 def get_body(token, owner, repo, pull_number):
@@ -109,8 +78,8 @@ def get_commits_by_folder(token, owner, repo, pull_request_number, folder):
     return modified_commits
 
 
-version = get_version(GITHUB_TOKEN, owner, REPO)
-pr_number = get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
+version = utils.get_version(GITHUB_TOKEN, owner, REPO)
+pr_number = utils.get_pull_request(GITHUB_TOKEN, owner, REPO, COMMIT)
 body = get_body(GITHUB_TOKEN, owner, REPO, pr_number)
 
 changelog_text = "### Changelog \n\n"
